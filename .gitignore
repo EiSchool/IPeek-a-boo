@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Files saved by the app (menu option 4)
+exports/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

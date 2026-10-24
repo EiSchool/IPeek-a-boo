@@ -18,7 +18,7 @@ from ipinfo import analysis, api, display, export
 
 def fetch_details(ip=None):
     """Look up and display location/ISP/ASN for `ip`. Returns the details or None."""
-    with display.console.status("Looking up location and provider..."):
+    with display.status("Consulting the crystal ball for location and provider..."):
         try:
             details = api.get_ip_details(ip)
         except api.LookupFailed as err:
@@ -33,7 +33,7 @@ def fetch_privacy(ip):
 
     This is a bonus section, so a failure is shown as a note, not an error.
     """
-    with display.console.status("Playing peek-a-boo..."):
+    with display.status("Playing peek-a-boo in the dark..."):
         try:
             flags = api.get_privacy_check(ip)
         except api.LookupFailed as err:
@@ -46,7 +46,7 @@ def fetch_privacy(ip):
 
 def my_public_ip():
     """Menu 1: show this computer's public IPv4 / IPv6 and where it is."""
-    with display.console.status("Finding your public IP addresses..."):
+    with display.status("Summoning your public IP addresses..."):
         try:
             ipv4 = api.get_public_ipv4()
         except api.LookupFailed as err:
@@ -144,11 +144,12 @@ def main():
         result = action()
         if result:
             last_result = result
-    display.console.print("[cyan]Bye! We'll stop peeking now.[/]")
+    display.show_goodbye()
 
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\nBye! We'll stop peeking now.")
+        print()
+        display.show_goodbye()

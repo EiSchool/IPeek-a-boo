@@ -175,7 +175,7 @@ Add a test in `tests/` for any new logic, and run `python -m unittest` before op
 ## Team workflow (GitHub)
 
 - `main` always works. Nobody pushes to it directly; everything goes through a **pull request**.
-- Each task gets its own branch: `feature/<short-name>` or `fix/<short-name>`. Sprint 1 branches: `feature/api` (Kristofer), `feature/analysis` and `feature/tests` (Cole), `feature/display` and `feature/export` (Jethro), `feature/menu` (Eissa).
+- Each task gets its own branch: `feature/<short-name>` or `fix/<short-name>`. Sprint 1 branches: `feature/api-carpio` (Kristofer), `feature/analysis-vidal` and `feature/tests-vidal` (Cole), `feature/display-cabuhat` and `feature/export-cabuhat` (Jethro), `feature/menu-tinio` (Eissa).
 - Every PR needs **one approving review** (QA, Cole, reviews every PR), and the tests must pass before Eissa merges it.
 - Tasks are tracked on the **GitHub Projects** board (To Do → In Progress → In Review → Done).
 

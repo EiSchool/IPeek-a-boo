@@ -26,7 +26,7 @@ Built by **Team We Don't Byte** for DEVASC Project Activity 3 – Social Coding 
 | 3 | **Peek-a-Boo check**: is the IP a **VPN/proxy/Tor exit**, a **data center/cloud host**, or on **mobile data**? It ends with a fun one-line verdict. | 1, 2 |
 | 4 | **Looks up any IP address** you type in, after checking that it is valid | 2 |
 | 5 | **Offline address analysis**: type (public/private/loopback/link-local/multicast/**carrier-grade NAT**), IPv4 class, binary, integer, reverse-DNS name, IPv6 compressed/expanded forms | 2, 3 |
-| 6 | **Colored tables** and loading spinners (`rich` library) | all |
+| 6 | **Halloween theme**: pumpkin banner, pumpkin-orange / witch-purple / slime-green colors, spooky menu hints and messages (`rich` library) | all |
 | 7 | **Automatic fallback**: if ipapi.co is down or rate limited, ip-api.com is used instead | 1, 2 |
 | 8 | **Friendly errors** for timeouts, no internet, rate limits and invalid input | all |
 | 9 | **Saves results** to JSON or CSV in `exports/` | 4 |
@@ -68,16 +68,23 @@ python app.py
 
 ```
 ┌──────────────────────────────────────────────┐
+│       ,(                                     │
+│    .-'-'-.                                   │
+│   / /\ /\ \                                  │
+│  |    ^    |                                 │
+│   \ \/\/\/ /                                 │
+│    '-...-'                                   │
+│                                              │
 │ IPeek-a-Boo  I see your IP!                  │
 │ Public IPv4 / IPv6 - Geolocation - ISP - ASN │
-│ by team We Don't Byte                        │
+│ by team We Don't Byte  -  Halloween edition  │
 └──────────────────────────────────────────────┘
 
-  1  Show my public IP information
-  2  Look up any IP address
-  3  Analyze an IP address (offline)
-  4  Save last result to a file
-  0  Exit
+  1  Show my public IP information  (unmask yourself)
+  2  Look up any IP address  (hunt a stranger)
+  3  Analyze an IP address (offline)  (read its bones)
+  4  Save last result to a file  (bury it in exports/)
+  0  Exit  (flee into the night)
 ```
 
 Example (option 2 → `8.8.8.8`, shortened):
@@ -89,8 +96,8 @@ Example (option 2 → `8.8.8.8`, shortened):
 │ Hosting / data center │ Yes   │
 │ Mobile network        │ No    │
 └───────────────────────┴───────┘
-Peek-a-boo... we still see you! ip-api.com lists this IP as a VPN, proxy or Tor exit.
-This IP lives in a data center (cloud/hosting), not a home or office.
+BOO! Nice mask... but we still see you. ip-api.com lists this IP as a VPN, proxy or Tor exit.
+This IP haunts a data center (cloud/hosting), not a home or office.
 ```
 
 Good addresses to try:
@@ -160,7 +167,7 @@ Design rules that keep the code easy to extend:
 | Add a new menu feature | Write a function in `app.py` that returns a result dict, add it to `ACTIONS`, and add a line to `display.MENU` |
 | Add another geolocation API | In `api.py`, write a `_url()` function and a `_from_<name>()` function that converts its JSON to the standard dict, then add both to `GEO_PROVIDERS` |
 | Show a new field | Add it to the standard dict in each `_from_*()` function and give it a label in `display.LABELS` |
-| Change colors, layout or the verdict jokes | Edit only `display.py` |
+| Change the theme, layout or the verdict jokes | Edit only `display.py`. The whole palette is the five color constants at the top (`PUMPKIN`, `WITCH`, `SLIME`, `BONE`, `BLOOD`) |
 | Add an export format | Add it to `export.FORMATS` and write it in `save_results()` |
 
 Add a test in `tests/` for any new logic, and run `python -m unittest` before opening a pull request.

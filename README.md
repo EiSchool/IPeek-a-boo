@@ -11,7 +11,7 @@ Built by **Team We Don't Byte** for DEVASC Project Activity 3 – Social Coding 
 | Jethro Cabuhat | Recorder & UI Developer | `ipinfo/display.py`, `ipinfo/export.py`, docs |
 | Cole Ezekiel Vidal | QA (Quality Assurance) | `ipinfo/analysis.py`, `tests/` |
 
-**Repository:** [https://github.com/OWNER/REPO] · **Version:** 1.0.0 (Sprint 1)
+**Repository:** https://github.com/EiSchool/IPeek-a-boo · **Version:** 1.0.0 (Sprint 1)
 
 > **Why the name?** "IP" + "peek" + the game peek-a-boo. Even if you hide behind a VPN, the app still finds you.
 
@@ -53,8 +53,8 @@ None of them needs an API key, so there are no secrets in this repository.
 2. Clone the repository and install the two libraries it needs:
 
 ```bash
-git clone https://github.com/OWNER/REPO.git
-cd REPO
+git clone https://github.com/EiSchool/IPeek-a-boo.git
+cd IPeek-a-boo
 python -m venv .venv
 .venv\Scripts\activate          # Windows  (macOS/Linux: source .venv/bin/activate)
 pip install -r requirements.txt

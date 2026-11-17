@@ -49,6 +49,7 @@ MENU = [
     ("2", "Look up any IP address", "hunt a stranger"),
     ("3", "Analyze an IP address (offline)", "read its bones"),
     ("4", "Save last result to a file", "bury it in exports/"),
+    ("5", "Subnet / CIDR calculator", "carve up the graveyard"),
     ("0", "Exit", "flee into the night"),
 ]
 
@@ -106,6 +107,20 @@ def show_peekaboo_verdict(flags):
     if not any(flags.values()):
         console.print(f"[{SLIME}]No ghosts here - looks like a regular "
                       "home/office connection.[/]")
+
+
+def show_ip_change(change):
+    """Print a one-line verdict for the dict from history.check_and_record()."""
+    status = change["Status"]
+    if status == "CHANGED":
+        console.print(f"[bold {BLOOD}]BOO! Your IP changed since the last peek[/] "
+                      f"[{BONE}]({escape(change['Changed'])}). A new DHCP lease, a VPN "
+                      "or a different network?[/]")
+    elif status == "Unchanged":
+        console.print(f"[{SLIME}]Same IP as last time - nothing has crept in.[/]")
+    else:
+        console.print(f"[{WITCH}]First peek recorded. Next time we'll tell you "
+                      "if your IP changed.[/]")
 
 
 def ask(question, choices=None, default=None):

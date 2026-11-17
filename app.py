@@ -1,4 +1,4 @@
-"""IPeek-a-Boo ("I see your IP!") - DEVASC Project Activity 3 (Option 2).
+"""IPeek-a-Boo ("I see your IP!") - DEVASC Project Activities 3 and 4 (Option 2).
 Team We Don't Byte: Tinio, Cabuhat, Carpio, Vidal.
 
 A menu-driven program that shows network technicians this computer's public
@@ -13,7 +13,7 @@ Each menu action returns a "result" dict (section -> fields) that the user can
 save with option 4. See README.md for the full design and how to extend it.
 """
 
-from ipinfo import analysis, api, display, export
+from ipinfo import analysis, api, display, export, history, maps
 
 
 def fetch_details(ip=None):
@@ -26,6 +26,15 @@ def fetch_details(ip=None):
             return None
     display.show_table("Location & provider", details)
     return details
+
+
+def show_map(details, results):
+    """Add 'Where am I?' map links for `details` to the screen and to `results`."""
+    links = maps.map_links(details)
+    if links:
+        display.show_table("Where am I?", links)
+        display.show_info("IP locations are approximate - usually the ISP's city, not your street.")
+        results["Where am I?"] = links
 
 
 def fetch_privacy(ip):
@@ -61,9 +70,15 @@ def my_public_ip():
     display.show_table("Your public addresses", addresses)
     results = {"Public addresses": addresses}
 
+    change = history.check_and_record(ipv4, ipv6)
+    display.show_table("IP change check", change)
+    display.show_ip_change(change)
+    results["IP change check"] = change
+
     details = fetch_details(ipv4)
     if details:
         results["Location & provider"] = details
+        show_map(details, results)
     flags = fetch_privacy(ipv4)
     if flags:
         results["Peek-a-Boo check"] = flags
@@ -90,6 +105,7 @@ def lookup_ip():
     details = fetch_details(str(addr))
     if details:
         results["Location & provider"] = details
+        show_map(details, results)
     flags = fetch_privacy(str(addr))
     if flags:
         results["Peek-a-Boo check"] = flags
@@ -108,10 +124,23 @@ def analyze_offline():
     return {"Address facts": facts}
 
 
+def subnet_calculator():
+    """Menu 5: network, mask, broadcast and host range of a subnet - no internet needed."""
+    try:
+        net = analysis.parse_network(
+            display.ask("Enter a network (e.g. 192.168.1.0/24 or 10.0.0.1 255.0.0.0)"))
+    except ValueError as err:
+        display.show_error(str(err))
+        return None
+    facts = analysis.subnet_info(net)
+    display.show_table("Subnet calculator", facts)
+    return {"Subnet calculator": facts}
+
+
 def save_last(last_result):
     """Menu 4: save the most recent result to exports/."""
     if not last_result:
-        display.show_info("Nothing to save yet - run option 1, 2 or 3 first.")
+        display.show_info("Nothing to save yet - run option 1, 2, 3 or 5 first.")
         return
     fmt = display.ask("File format", choices=list(export.FORMATS), default="json")
     path = export.save_results(last_result, fmt)
@@ -123,6 +152,7 @@ ACTIONS = {
     "1": my_public_ip,
     "2": lookup_ip,
     "3": analyze_offline,
+    "5": subnet_calculator,
 }
 
 

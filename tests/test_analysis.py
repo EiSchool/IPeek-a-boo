@@ -60,5 +60,59 @@ class AnalyzeTests(unittest.TestCase):
         self.assertEqual(info["Exploded"], "2001:0db8:0000:0000:0000:0000:0000:0001")
 
 
+class ParseNetworkTests(unittest.TestCase):
+    def test_accepted_formats(self):
+        for text in ("192.168.1.0/24", "192.168.1.77/24", "192.168.1.0 255.255.255.0",
+                     " 192.168.1.0/255.255.255.0 "):
+            self.assertEqual(str(analysis.parse_network(text)), "192.168.1.0/24", text)
+
+    def test_bare_address_is_single_host(self):
+        self.assertEqual(analysis.parse_network("8.8.8.8").prefixlen, 32)
+
+    def test_invalid_input_gives_friendly_error(self):
+        for bad in ("hello", "192.168.1.0/33", "10.0.0.0 255.0.255.0", ""):
+            with self.assertRaises(ValueError):
+                analysis.parse_network(bad)
+
+
+class SubnetInfoTests(unittest.TestCase):
+    def info(self, text):
+        return analysis.subnet_info(analysis.parse_network(text))
+
+    def test_class_c_sized_subnet(self):
+        info = self.info("192.168.1.130/24")
+        self.assertEqual(info["Network address"], "192.168.1.0")
+        self.assertEqual(info["Subnet mask"], "255.255.255.0")
+        self.assertEqual(info["Wildcard mask"], "0.0.0.255")
+        self.assertEqual(info["Broadcast address"], "192.168.1.255")
+        self.assertEqual(info["First usable host"], "192.168.1.1")
+        self.assertEqual(info["Last usable host"], "192.168.1.254")
+        self.assertEqual(info["Usable hosts"], "254")
+        self.assertEqual(info["Total addresses"], "256")
+        self.assertEqual(info["Type"], "Private")
+
+    def test_small_subnet_from_dotted_mask(self):
+        info = self.info("10.10.10.70 255.255.255.224")
+        self.assertEqual(info["Network"], "10.10.10.64/27")
+        self.assertEqual(info["Broadcast address"], "10.10.10.95")
+        self.assertEqual(info["Usable hosts"], "30")
+
+    def test_point_to_point_and_single_host(self):
+        p2p = self.info("203.0.113.0/31")
+        self.assertEqual(p2p["Usable hosts"], "2")
+        self.assertEqual(p2p["First usable host"], "203.0.113.0")
+        self.assertEqual(p2p["Last usable host"], "203.0.113.1")
+        host = self.info("8.8.8.8/32")
+        self.assertEqual(host["Usable hosts"], "1")
+        self.assertEqual(host["Type"], "Public")
+
+    def test_huge_networks_are_instant(self):
+        self.assertEqual(self.info("10.0.0.0/8")["Usable hosts"], "16,777,214")
+        info = self.info("2001:db8::/64")
+        self.assertEqual(info["Total addresses"], "18,446,744,073,709,551,616")
+        self.assertEqual(info["Last address"], "2001:db8::ffff:ffff:ffff:ffff")
+        self.assertNotIn("Broadcast address", info)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -12,3 +12,8 @@ exports/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Coverage reports (CI uploads its own)
+.coverage
+htmlcov/
+.ci-venv/

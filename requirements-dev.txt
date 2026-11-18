@@ -1,0 +1,4 @@
+# Everything the app needs, plus the tools the CI pipeline runs.
+-r requirements.txt
+flake8>=7.0
+coverage>=7.4

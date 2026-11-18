@@ -118,7 +118,7 @@ def subnet_info(net):
         info["Wildcard mask"] = str(net.hostmask)
         if net.prefixlen <= 30:
             info["Broadcast address"] = str(net.broadcast_address)
-            first, last, usable = net.network_address + 1, net.broadcast_address - 1, total - 2
+            first, last, usable = net.network_address + 1, net.broadcast_address - 1, total - 1
         else:  # /31 and /32
             info["Broadcast address"] = "None (/31 and /32 have no broadcast)"
             first, last, usable = net.network_address, net.broadcast_address, total
